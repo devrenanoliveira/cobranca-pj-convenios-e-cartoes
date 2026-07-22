@@ -1,0 +1,264 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #0F172A;
+  color: #E2E8F0;
+  min-height: 100vh;
+  padding: 14px;
+}
+
+h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #F8FAFC;
+  letter-spacing: -0.5px;
+}
+
+.sub {
+  font-size: 11px;
+  color: #64748B;
+  margin-top: 3px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+.btn {
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  background: #1E293B;
+  border: 1px solid #334155;
+  color: #94A3B8;
+  font-weight: 500;
+  transition: all .15s;
+}
+
+.btn.active {
+  background: #3B82F6;
+  border-color: #3B82F6;
+  color: #fff;
+}
+
+.card {
+  background: #1E293B;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 13px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-bottom: 13px;
+}
+
+.kpi {
+  background: #1E293B;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 13px 8px;
+  text-align: center;
+}
+
+.kpi-val {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.kpi-lbl {
+  font-size: 10px;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-top: 2px;
+}
+
+.kpi-sub {
+  font-size: 10px;
+  color: #475569;
+  margin-top: 2px;
+}
+
+.filter-box {
+  background: #1E293B;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 13px;
+  margin-bottom: 13px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+.filter-title {
+  font-size: 10px;
+  color: #94A3B8;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  margin-bottom: 7px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+}
+
+.filter-title a {
+  color: #3B82F6;
+  cursor: pointer;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  border: 1px solid #334155;
+  color: #475569;
+  background: #0F172A;
+  transition: all .15s;
+  user-select: none;
+  opacity: 0.45;
+  text-decoration: none;
+}
+
+.chip.active {
+  background: #1E3A5F;
+  border-color: #3B82F6;
+  color: #CBD5E1;
+  font-weight: 600;
+  opacity: 1;
+}
+
+.val-inputs {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.val-inputs input {
+  background: #0F172A;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 5px 8px;
+  color: #E2E8F0;
+  font-size: 12px;
+  width: 80px;
+}
+
+.val-inputs span {
+  color: #475569;
+  font-size: 12px;
+}
+
+.val-inputs .clear {
+  color: #EF4444;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.chart-card {
+  background: #1E293B;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.chart-title {
+  font-size: 12px;
+  color: #94A3B8;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.chart-full {
+  background: #1E293B;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 0;
+}
+
+.insight-box {
+  background: #0F2A1A;
+  border: 1px solid #16A34A;
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 13px;
+}
+
+.insight-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #4ADE80;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  margin-bottom: 9px;
+}
+
+.insight-item {
+  font-size: 13px;
+  color: #D1FAE5;
+  line-height: 1.65;
+  margin-bottom: 3px;
+}
+
+.insight-footer {
+  margin-top: 9px;
+  font-size: 11px;
+  color: #065F46;
+  border-top: 1px solid #166534;
+  padding-top: 7px;
+}
+
+canvas {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
