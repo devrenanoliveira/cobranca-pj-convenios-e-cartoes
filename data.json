@@ -1,0 +1,101 @@
+{
+  "summary": {
+    "totalVolume": 15420000,
+    "avgPrice": 482.50,
+    "activeDealers": 42,
+    "totalTransactions": 1280
+  },
+  "regions": [
+    "Norte",
+    "Nordeste",
+    "Centro-Oeste",
+    "Sudeste",
+    "Sul"
+  ],
+  "categories": [
+    "Insumos",
+    "Maquinário",
+    "Tecnologia",
+    "Serviços"
+  ],
+  "dealers": [
+    {
+      "id": "D001",
+      "name": "AgroVerde Sul",
+      "region": "Sul",
+      "category": "Insumos",
+      "salesVolume": 2450000,
+      "transactions": 180,
+      "avgTicket": 13611.11,
+      "status": "Ativo"
+    },
+    {
+      "id": "D002",
+      "name": "TerraForte Equipamentos",
+      "region": "Sudeste",
+      "category": "Maquinário",
+      "salesVolume": 4100000,
+      "transactions": 95,
+      "avgTicket": 43157.89,
+      "status": "Ativo"
+    },
+    {
+      "id": "D003",
+      "name": "Cerrado Tech",
+      "region": "Centro-Oeste",
+      "category": "Tecnologia",
+      "salesVolume": 1850000,
+      "transactions": 310,
+      "avgTicket": 5967.74,
+      "status": "Ativo"
+    },
+    {
+      "id": "D004",
+      "name": "Nordeste AgroSoluções",
+      "region": "Nordeste",
+      "category": "Serviços",
+      "salesVolume": 980000,
+      "transactions": 210,
+      "avgTicket": 4666.67,
+      "status": "Em Análise"
+    },
+    {
+      "id": "D005",
+      "name": "Amazônia Rural",
+      "region": "Norte",
+      "category": "Insumos",
+      "salesVolume": 1200000,
+      "transactions": 140,
+      "avgTicket": 8571.43,
+      "status": "Ativo"
+    },
+    {
+      "id": "D006",
+      "name": "Sultrade Máquinas",
+      "region": "Sul",
+      "category": "Maquinário",
+      "salesVolume": 3200000,
+      "transactions": 80,
+      "avgTicket": 40000.00,
+      "status": "Ativo"
+    },
+    {
+      "id": "D007",
+      "name": "BioCampo Digital",
+      "region": "Sudeste",
+      "category": "Tecnologia",
+      "salesVolume": 1640000,
+      "transactions": 260,
+      "avgTicket": 6307.69,
+      "status": "Inativo"
+    }
+  ],
+  "monthlyPerformance": [
+    { "month": "Jan", "volume": 1100000, "deals": 90 },
+    { "month": "Fev", "volume": 1250000, "deals": 102 },
+    { "month": "Mar", "volume": 1400000, "deals": 115 },
+    { "month": "Abr", "volume": 1180000, "deals": 98 },
+    { "month": "Mai", "volume": 1350000, "deals": 110 },
+    { "month": "Jun", "volume": 1500000, "deals": 125 }
+  ]
+}
