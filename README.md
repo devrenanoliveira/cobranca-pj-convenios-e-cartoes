@@ -4,7 +4,8 @@ Dashboard de carteira vencida / a vencer por agenda + cheques pré-datados.
 
 ## Atualizar
 ```
-python build.py            # usa a pasta Dados/**/ com o RELATORIO mais recente
+python build.py            # dashboard.html: versão completa, nominal, SÓ LOCAL
+python build.py --publico  # index.html: sem nome/CPF/CNPJ/NF, vai pro GitHub Pages
 python build.py "Dados/Histórico 2026/Outubro"
 ```
 Gera `dashboard.html` (autônomo, abrir no navegador; precisa de internet p/ as libs via CDN). O build confere os cheques contra a aba RESUMO PORTADOR.

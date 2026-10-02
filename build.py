@@ -1,6 +1,7 @@
 """Lê os 2 Excel da pasta de dados mais recente e gera dashboard.html (autônomo).
 
-Uso:  python build.py [pasta_com_os_xlsx]
+Uso:  python build.py [pasta_com_os_xlsx] [--publico]
+  sem flag -> dashboard.html (nominal, só local); --publico -> index.html (sem identificação, vai pro Pages)
 Sem argumento, usa a pasta do RELATORIO INADIMPLENCIA mais recente em Dados/.
 """
 import glob, json, os, re, sys
@@ -18,8 +19,9 @@ COD = {c for c, _ in PRODUTOS}
 
 
 def acha_pasta():
-    if len(sys.argv) > 1:
-        return sys.argv[1]
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    if args:
+        return args[0]
     rel = glob.glob(os.path.join(AQUI, "Dados", "**", "RELATORIO*.xlsx"), recursive=True)
     if not rel:
         sys.exit("Nenhum RELATORIO*.xlsx em Dados/")
@@ -93,9 +95,14 @@ if __name__ == "__main__":
     rows += ler_cheques(pasta, ref, lojas, devs)
     # vencimento <= ref é vencido; qualquer linha "A vencer" com atraso>0 seria inconsistência
     assert all(r[2] <= 0 for r in rows if r[1] == "A"), "linha a vencer com atraso"
-    data = {"ref": ref.isoformat(), "pasta": os.path.basename(pasta), "prods": PRODUTOS,
+    pub = "--publico" in sys.argv
+    if pub:  # tira tudo que identifica devedor: nome, CNPJ/CPF, NF/cheque, emissão
+        rows = [r[:5] + [0, "", r[7], "", r[9], "", r[11]] for r in rows]
+        devs.l = ["(oculto)"]
+    data = {"pub": pub, "ref": ref.isoformat(), "pasta": os.path.basename(pasta), "prods": PRODUTOS,
             "lojas": lojas.l, "devs": devs.l, "rows": rows}
     tpl = open(os.path.join(AQUI, "template.html"), encoding="utf-8").read()
     out = tpl.replace("/*DATA*/null", json.dumps(data, ensure_ascii=False, separators=(",", ":")))
-    open(os.path.join(AQUI, "dashboard.html"), "w", encoding="utf-8").write(out)
-    print(f"dashboard.html: {len(rows)} linhas, {len(out)/1e6:.1f} MB")
+    nome = "index.html" if pub else "dashboard.html"
+    open(os.path.join(AQUI, nome), "w", encoding="utf-8").write(out)
+    print(f"{nome}: {len(rows)} linhas, {len(out)/1e6:.1f} MB")
