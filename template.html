@@ -121,7 +121,7 @@ function init(){
     $("t-res").classList.toggle("hide",b.dataset.t!="res");$("t-ana").classList.toggle("hide",b.dataset.t!="ana")});
   $("pv").onclick=()=>{page=Math.max(0,page-1);anal()};$("pn").onclick=()=>{page++;anal()};
   $("bx").onclick=xlsx;$("bp").onclick=pdf;
-  if(PUB){$("cTop").classList.add("hide");$("fQ").parentNode.classList.add("hide");$("sub").textContent+=" · versão pública (sem identificação de devedores)"}
+  if(PUB){$("cTop").classList.add("hide");$("fQ").parentNode.firstChild.textContent="Buscar (NF / cheque)";$("sub").textContent+=" · versão pública (sem identificação de devedores)"}
   upd();
 }
 
@@ -203,7 +203,7 @@ function tabelas(){
 
 const COLS0=[["p","Produto",r=>PN[r.p]],["s","Situação",r=>r.s=="V"?"Vencido":"A vencer"],["f","Faixa",r=>r.f<0?"A vencer":FX[r.f][0]],["a","Atraso (d)",r=>r.a],["v","Vencimento",r=>dmy(r.v)],
   ["val","Valor",r=>r.val],["dev","Devedor",r=>r.dev],["doc","CNPJ/CPF ou código",r=>r.doc],["loja","Loja",r=>r.loja],["nf","NF / Cheque",r=>r.nf],["par","Parcela",r=>r.par||""],["em","Emissão",r=>dmy(r.em)],["port","Portador",r=>r.port]];
-const NOM=["dev","doc","nf","em"];
+const NOM=["dev","doc"];
 const COLS=COLS0.filter(c=>!(PUB&&NOM.includes(c[0])));
 function anal(){
   const a=[...cur].sort((x,y)=>(x[sortK]>y[sortK]?1:x[sortK]<y[sortK]?-1:0)*sortD),np=Math.max(1,Math.ceil(a.length/PS));page=Math.min(page,np-1);
@@ -224,7 +224,7 @@ function xlsx(){
   const m=matriz(),wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Inadimplência Produtos PJ Condor"],["Posição",dmy(DATA.ref)],["Filtros",filtroTxt()],[],m.head,...m.rows]),"Resumo");
   const a=[...cur].sort((x,y)=>y.val-x.val).map(r=>({Produto:PN[r.p],"Situação":r.s=="V"?"Vencido":"A vencer",Faixa:r.f<0?"A vencer":FX[r.f][0]+" d","Atraso (dias)":Math.max(0,r.a),
-    Vencimento:dmy(r.v),Valor:r.val,Loja:r.loja,Parcela:r.par||"",Portador:r.port,...(PUB?{}:{Devedor:r.dev,"CNPJ/CPF ou código":r.doc,"NF/Cheque":r.nf,"Emissão":dmy(r.em)})}));
+    Vencimento:dmy(r.v),Valor:r.val,Loja:r.loja,Parcela:r.par||"",Portador:r.port,"NF/Cheque":r.nf,"Emissão":dmy(r.em),...(PUB?{}:{Devedor:r.dev,"CNPJ/CPF ou código":r.doc})}));
   XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(a),"Analítico");
   XLSX.writeFile(wb,`inadimplencia_pj_${stamp()}.xlsx`);
 }
@@ -247,8 +247,8 @@ function pdf(){
     columnStyles:{1:{halign:"right"},2:{halign:"right"},3:{halign:"right"}}})}
   const CAP=3000,a=[...cur].sort((x,y)=>y.val-x.val).slice(0,CAP);
   d.addPage();d.setFontSize(11);d.text(`Analítico — ${a.length.toLocaleString("pt-BR")} maiores valores${cur.length>CAP?` de ${cur.length.toLocaleString("pt-BR")} (use o Excel para a lista completa)`:""}`,40,40);
-  d.autoTable({startY:50,head:[["Produto","Sit.","Atraso","Venc.","Valor","Loja"].concat(PUB?[]:["Devedor","CNPJ/CPF","NF/Chq"])],
-    body:a.map(r=>[PN[r.p],r.s=="V"?"Venc.":"A venc.",Math.max(0,r.a),dmy(r.v),brl(r.val),r.loja].concat(PUB?[]:[r.dev,r.doc,r.nf])),styles:{fontSize:6.5,cellPadding:2},headStyles:{fillColor:[31,78,156]},
+  d.autoTable({startY:50,head:[["Produto","Sit.","Atraso","Venc.","Valor","Loja","NF/Chq"].concat(PUB?[]:["Devedor","CNPJ/CPF"])],
+    body:a.map(r=>[PN[r.p],r.s=="V"?"Venc.":"A venc.",Math.max(0,r.a),dmy(r.v),brl(r.val),r.loja,r.nf].concat(PUB?[]:[r.dev,r.doc])),styles:{fontSize:6.5,cellPadding:2},headStyles:{fillColor:[31,78,156]},
     columnStyles:{2:{halign:"right"},4:{halign:"right"}}});
   const n=d.internal.getNumberOfPages();for(let i=1;i<=n;i++){d.setPage(i);d.setFontSize(8);d.setTextColor(120);d.text(`Página ${i}/${n}`,W-80,d.internal.pageSize.getHeight()-20)}
   d.save(`inadimplencia_pj_${stamp()}.pdf`);

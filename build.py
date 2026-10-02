@@ -96,8 +96,8 @@ if __name__ == "__main__":
     # vencimento <= ref é vencido; qualquer linha "A vencer" com atraso>0 seria inconsistência
     assert all(r[2] <= 0 for r in rows if r[1] == "A"), "linha a vencer com atraso"
     pub = "--publico" in sys.argv
-    if pub:  # tira tudo que identifica devedor: nome, CNPJ/CPF, NF/cheque, emissão
-        rows = [r[:5] + [0, "", r[7], "", r[9], "", r[11]] for r in rows]
+    if pub:  # tira tudo que identifica devedor: nome e CNPJ/CPF
+        rows = [r[:5] + [0, "", r[7], r[8], r[9], r[10], r[11]] for r in rows]
         devs.l = ["(oculto)"]
     data = {"pub": pub, "ref": ref.isoformat(), "pasta": os.path.basename(pasta), "prods": PRODUTOS,
             "lojas": lojas.l, "devs": devs.l, "rows": rows}
