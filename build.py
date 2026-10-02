@@ -12,10 +12,10 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 PRODUTOS = [  # (código, nome) — ordem de exibição
     ("567", "Cartão Corporativo"), ("341", "Cartão Mercado"), ("936", "Empréstimo PJ"),
     ("76", "CDC Funcionário"), ("239", "Venda faturada Condor"), ("109", "Cartão presente"),
-    ("162", "Venda faturada Postos"), ("163", "Cartão Frota"),
-    ("161", "Agenda 161 (sem descrição)"), ("CHQ", "Cheques pré-datados"),
+    ("161", "Cartão presente abastecimento (Postos)"), ("163", "Cartão Frota"), ("CHQ", "Cheques pré-datados"),
 ]
-COD = {c for c, _ in PRODUTOS}
+ALIAS = {"162": "163"}  # agendas 162 e 163 formam o mesmo produto (Cartão Frota)
+COD = {c for c, _ in PRODUTOS} | set(ALIAS)
 
 
 def acha_pasta():
@@ -57,9 +57,9 @@ def ler_agendas(pasta, lojas, devs):
         for r in d.itertuples(index=False):
             g = dict(zip(d.columns, r))
             nome = re.sub(r"^\d+-", "", str(g["FORNECEDOR"]))
-            rows.append([ag, st, int(g["ATRASO"]), iso(g["DATA VENCIMENTO"]), round(float(g["VALOR NOTA"]), 2),
+            rows.append([ALIAS.get(ag, ag), st, int(g["ATRASO"]), iso(g["DATA VENCIMENTO"]), round(float(g["VALOR NOTA"]), 2),
                          devs(nome), str(g["CNPJ"]), lojas(g["LOJA"]), str(g["NOTA FISCAL"]), int(g["PARCELA"]),
-                         iso(g[em]), ""])
+                         iso(g[em]), ag])
     ref = ref_votos.groupby(level=0).sum().idxmax()
     return rows, ref.date()
 
