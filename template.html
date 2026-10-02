@@ -215,8 +215,8 @@ tr.tot td{font-weight:800;background:var(--hover);border-top:2px solid var(--lin
 <script>
 const DATA=/*DATA*/null;
 const PUB=!!DATA.pub;
-const FX=[["1–30",1,30],["31–60",31,60],["61–90",61,90],["91–180",91,180],["181–360",181,360],["361–720",361,720],[">720",721,1e9]];
-const FXC=["#9DB7CF","#6F97BA","#D6A94E","#D58A3C","#C4572F","#A12D2D","#5E1A1A"];
+const FX=[["1–30",1,30],["31–60",31,60],["61–90",61,90],["91–180",91,180],["181–360",181,360],["361–720",361,720],["721–1080",721,1080],["1081–1440",1081,1440],["1441–1800",1441,1800],[">1800",1801,1e9]];
+const FXC=["#9DB7CF","#6F97BA","#D6A94E","#D58A3C","#C4572F","#A12D2D","#8A2424","#701C1C","#561515","#3A0E0E"];
 const JAN=[["Até 7 dias",0,7],["8–30",8,30],["31–60",31,60],["61–90",61,90],["91–365",91,365],[">365",366,1e9]];
 const JANC=["#2F6690","#5B8DB8","#8DB0CC","#B08A4B","#C9A566","#7B8794"];
 const MESES=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
@@ -312,7 +312,7 @@ function rRes(){
 function insights(){
   const V=cur.filter(r=>r.s=="V"),vv=sum(V),out=[];
   if(!V.length){$("ins").innerHTML="<li>Sem vencido no filtro atual.</li>";return}
-  const byFx=FX.map((_,i)=>sum(V.filter(r=>r.f==i))),old=byFx[5]+byFx[6],rec=byFx[0]+byFx[1];
+  const byFx=FX.map((_,i)=>sum(V.filter(r=>r.f==i))),old=byFx.slice(5).reduce((s,x)=>s+x,0),rec=byFx[0]+byFx[1];
   out.push(["r",`<b>${pct(old/vv)}</b> do vencido (${mi(old)}) tem mais de 360 dias de atraso — dificilmente recuperável pela cobrança comum; candidato a revisão de provisão/baixa ou cobrança jurídica.`]);
   out.push(["g",`<b>${mi(rec)}</b> (${pct(rec/vv)}) está em até 60 dias — janela de maior recuperação; priorizar régua de cobrança aqui.`]);
   if(!PUB){const dv=[...group(V,r=>r.dev)].map(([k,a])=>[k,sum(a)]).sort((a,b)=>b[1]-a[1]);
