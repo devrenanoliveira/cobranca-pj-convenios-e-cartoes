@@ -19,3 +19,6 @@ Gera `dashboard.html` (autônomo, abrir no navegador; precisa de internet p/ as 
 ## Pendências
 - Criar repositório privado no GitHub (como KPIs/Carteira/Governança); decidir como proteger os dados nominais (não publicar o HTML gerado em Pages público).
 - Migrar base de Excel para outra fonte (previsto).
+
+## Visual
+Padrão do KPIs/Carteira (header, abas, KPI cards, tabelas, modo escuro, Manrope) com paleta PJ: grafite/aço + bronze. Abas: Resultado Geral, Vencido por Faixa, A Vencer, Por Produto, Analítico.

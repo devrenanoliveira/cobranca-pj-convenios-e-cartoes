@@ -4,251 +4,440 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Inadimplência Produtos PJ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
-:root{--bg:#f4f5f7;--card:#fff;--tx:#1d2330;--mut:#667085;--bd:#e3e6ec;--ac:#1f4e9c;--ac2:#e8effa;--red:#c0392b;--grn:#1e8449;--amb:#b9770e}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#12151c;--card:#1b202b;--tx:#e8ebf1;--mut:#9aa3b5;--bd:#2c3341;--ac:#6ea0f0;--ac2:#243247;--red:#ec7063;--grn:#58d68d;--amb:#f5b041}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.4 system-ui,Segoe UI,Arial,sans-serif}
-header{padding:16px 24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
-h1{margin:0;font-size:20px}h1 small{display:block;font-weight:400;color:var(--mut);font-size:12px;margin-top:2px}
-button,select,input{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:6px 10px}
-button{cursor:pointer}button.pri{background:var(--ac);color:#fff;border-color:var(--ac)}
-main{padding:0 24px 32px;max-width:1500px;margin:auto}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;margin-bottom:14px}
-.card h2{margin:0 0 10px;font-size:14px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
-.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
-.filters label{display:flex;flex-direction:column;font-size:12px;color:var(--mut);gap:3px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.chip{padding:3px 10px;border-radius:999px;border:1px solid var(--bd);background:var(--card);font-size:12px;cursor:pointer;user-select:none}
-.chip.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
-.kpi{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px 14px}
-.kpi span{font-size:12px;color:var(--mut)}.kpi b{display:block;font-size:22px;margin-top:2px}.kpi i{font-style:normal;font-size:12px;color:var(--mut)}
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px}
-.chart{position:relative;height:300px}
-.tabs{display:flex;gap:4px;margin-bottom:14px}.tabs button{border-radius:6px 6px 0 0}.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap}
-th{color:var(--mut);font-weight:600;position:sticky;top:0;background:var(--card)}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
-tr.tot td{font-weight:700;border-top:2px solid var(--bd)}
+:root{
+  --navy:#13233A;--navy-mid:#1F3A5C;--steel:#2F6690;--steel-l:#5B8DB8;--bronze:#B08A4B;--bronze-l:#C9A566;
+  --surface:#EEF1F5;--card:#fff;--line:#E2E8F0;--ink:#0F172A;--ink2:#52606F;--mut:#8593A3;
+  --neg:#A12D2D;--pos:#2E7D5B;--warn:#B7791F;--tint-red:#FBF1F0;--tint-red-b:#EBC9C5;--tint-gold:#FAF5EA;--tint-gold-b:#E6D5AE;
+  --hover:#EEF4FA;--zebra:#F7F9FC;
+  --r-sm:6px;--r-md:8px;--r-lg:12px;--r-pill:999px}
+body.dark{--surface:#0E1621;--card:#162231;--line:#26364A;--ink:#E8EDF4;--ink2:#9FB0C6;--mut:#6F8197;--neg:#E08A82;--pos:#6CC4A0;--warn:#E0B467;
+  --tint-red:#2A1D22;--tint-red-b:#4A2B30;--tint-gold:#2A2518;--tint-gold-b:#4B4024;--hover:#1C2D42;--zebra:#1A2838;--navy:#0B1626;--steel:#5B8DB8}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+button,input,select{font-family:inherit}
+body{font-family:'Manrope',system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--surface);color:var(--ink);font-size:14px;min-height:100vh}
+.hide{display:none!important}
+
+/* header */
+.header{background:var(--navy);color:#fff;padding:11px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.header-left{display:flex;align-items:center;gap:16px}
+.header-logo{height:34px}
+.header-sep{width:1px;height:38px;background:rgba(255,255,255,.25)}
+.header-title{font-size:1.3rem;font-weight:700;letter-spacing:-.01em;opacity:.95}
+.header-right{display:flex;align-items:center;gap:10px;text-align:right}
+.header-update{font-size:.72rem;opacity:.7;line-height:1.6;margin-right:6px}
+.header-update strong{opacity:.95}
+.icon-btn{background:none;border:none;color:rgba(255,255,255,.65);cursor:pointer;padding:6px 8px;border-radius:var(--r-md);display:flex;align-items:center}
+.icon-btn:hover{color:#fff}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid transparent;border-radius:var(--r-md);padding:9px 16px;font-size:.8rem;font-weight:700;letter-spacing:.02em;cursor:pointer;transition:background-color .15s,transform .05s}
+.btn:active{transform:translateY(1px)}
+.btn-bronze{background:var(--bronze);color:var(--navy)}.btn-bronze:hover{background:var(--bronze-l)}
+.btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}.btn-ghost:hover{background:rgba(255,255,255,.1)}
+
+/* tabs */
+.tab-nav{background:var(--navy);border-top:1px solid rgba(255,255,255,.1);display:flex;overflow-x:auto;padding:0 20px;scrollbar-width:none;position:sticky;top:0;z-index:20}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{padding:10px 18px;border:none;background:none;color:rgba(255,255,255,.6);font-size:.78rem;font-weight:500;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;border-radius:var(--r-md) var(--r-md) 0 0;transition:color .15s,background-color .15s;letter-spacing:.01em}
+.tab-btn:hover{color:rgba(255,255,255,.9)}
+.tab-btn.active{color:#fff;font-weight:700;background:rgba(255,255,255,.12);border-bottom-color:var(--bronze)}
+
+main{padding:20px 28px 40px;max-width:1560px;margin:auto}
+
+/* filtros */
+.filter-bar{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 16px;margin-bottom:20px}
+.filter-grid{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.filter-grid label{display:flex;flex-direction:column;gap:3px;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.filter-grid select,.filter-grid input{font-size:.8rem;font-weight:500;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:6px 10px;letter-spacing:0;text-transform:none}
+.filter-row{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.filter-label{font-size:.74rem;color:var(--ink2);font-weight:700;margin-right:2px}
+.pill{padding:5px 12px;border:1px solid var(--line);border-radius:var(--r-pill);background:var(--card);font-size:.74rem;cursor:pointer;color:var(--ink2);transition:all .15s;user-select:none}
+.pill:hover:not(.on){background:var(--hover)}
+.pill.on{background:var(--navy-mid);border-color:var(--navy-mid);color:#fff}
+body.dark .pill.on{background:var(--steel);border-color:var(--steel)}
+.pill.clear{border-style:dashed}
+
+/* seção */
+.eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--steel);margin-bottom:2px}
+.sec-title{font-size:1.5rem;font-weight:700;color:var(--navy-mid);line-height:1.15;margin-bottom:3px}
+body.dark .sec-title{color:var(--ink)}
+.sec-sub{font-size:.74rem;color:var(--mut);margin-bottom:20px}
+
+/* kpis */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:18px}
+.kpi-card{background:var(--card);border-radius:var(--r-md);padding:16px 18px;border:1px solid var(--line)}
+.kpi-card.navy{background:var(--navy);border-color:var(--navy)}
+.kpi-card.red{background:var(--tint-red);border-color:var(--tint-red-b)}
+.kpi-card.gold{background:var(--tint-gold);border-color:var(--tint-gold-b)}
+.kpi-label{font-size:.67rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.kpi-value{font-size:1.7rem;font-weight:700;line-height:1;color:var(--navy-mid);margin-bottom:5px;font-variant-numeric:tabular-nums}
+body.dark .kpi-value{color:var(--ink)}
+.kpi-card.red .kpi-value{color:var(--neg)}
+.kpi-card.navy .kpi-label,.kpi-card.navy .kpi-sub{color:rgba(255,255,255,.65)}
+.kpi-card.navy .kpi-value{color:#fff}
+.kpi-sub{font-size:.74rem;color:var(--ink2)}
+.bar{height:5px;background:var(--line);border-radius:3px;margin-top:10px;overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:3px;background:var(--steel)}
+.kpi-card.navy .bar{background:rgba(255,255,255,.2)}.kpi-card.navy .bar>i{background:var(--bronze)}
+
+/* cards */
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:14px;margin-bottom:18px}
+.chart-card{background:var(--card);border-radius:var(--r-md);border:1px solid var(--line);padding:20px}
+.chart-title{font-size:.71rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink2);margin-bottom:14px}
+.chart-wrap{position:relative;height:300px}
+
+/* insights */
+.ins{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:10px}
+.ins li{padding:10px 14px;border-left:4px solid var(--steel);background:var(--hover);border-radius:var(--r-sm);font-size:.82rem;line-height:1.45;color:var(--ink)}
+.ins li.r{border-color:var(--neg)}.ins li.a{border-color:var(--bronze)}.ins li.g{border-color:var(--pos)}
+
+/* tabelas */
+.table-card{background:var(--card);border-radius:var(--r-md);border:1px solid var(--line);overflow:hidden;margin-bottom:18px}
+.table-head{padding:14px 18px 10px;border-bottom:1px solid var(--line)}
+.table-head .chart-title{margin:0}
 .scroll{overflow:auto;max-height:560px}
-th.s{cursor:pointer}th.s:hover{color:var(--ac)}
-.ins{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.ins li{padding:8px 12px;border-left:4px solid var(--ac);background:var(--ac2);border-radius:4px}
-.ins li.r{border-color:var(--red)}.ins li.a{border-color:var(--amb)}.ins li.g{border-color:var(--grn)}
-.pg{display:flex;gap:8px;align-items:center;margin-top:10px;color:var(--mut)}
-.hide{display:none}
-@media (max-width:600px){header,main{padding-left:12px;padding-right:12px}.grid2{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:.83rem}
+thead th{background:var(--navy);color:#fff;padding:9px 14px;font-size:.72rem;font-weight:600;text-align:right;white-space:nowrap;letter-spacing:.02em;position:sticky;top:0}
+thead th:first-child{text-align:left}
+thead th.s{cursor:pointer}thead th.s:hover{background:var(--navy-mid)}
+tbody tr:nth-child(even){background:var(--zebra)}
+tbody tr:hover{background:var(--hover)}
+tbody td{padding:8px 14px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tbody td:first-child{text-align:left;font-weight:500}
+td.l{text-align:left!important}
+tr.tot td{font-weight:800;background:var(--hover);border-top:2px solid var(--line)}
+.td-neg{color:var(--neg);font-weight:700}.td-mut{color:var(--mut)}
+.pg{display:flex;gap:10px;align-items:center;padding:12px 18px;color:var(--ink2);font-size:.78rem}
+.pg button{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:var(--r-sm);padding:4px 12px;cursor:pointer}
+
+/* produtos */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
+.prod-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:18px;border-top:4px solid var(--steel)}
+.prod-card h3{font-size:.95rem;font-weight:700;color:var(--navy-mid)}body.dark .prod-card h3{color:var(--ink)}
+.prod-card .cod{font-size:.7rem;color:var(--mut);font-weight:600;margin-bottom:12px}
+.prod-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.prod-nums span{display:block;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.prod-nums b{font-size:1rem;font-variant-numeric:tabular-nums}
+.stack{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--line);margin-bottom:8px}
+.stack i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:.66rem;color:var(--ink2)}
+.legend em{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;font-style:normal}
+.prod-card .btn{margin-top:12px;padding:6px 12px;font-size:.72rem;background:var(--navy-mid);color:#fff}
+
+@media (max-width:640px){.header,main{padding-left:14px;padding-right:14px}.chart-grid{grid-template-columns:1fr}.prod-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header>
-  <h1>Inadimplência — Produtos PJ Condor<small id="sub"></small></h1>
-  <div><button id="bx" class="pri">Exportar Excel</button> <button id="bp" class="pri">Exportar PDF</button></div>
+<header class="header">
+  <div class="header-left">
+    <img src="logo-zon-card-white.png" alt="Z-ON Card" class="header-logo">
+    <div class="header-sep"></div>
+    <div class="header-title">Inadimplência | Produtos PJ</div>
+  </div>
+  <div class="header-right">
+    <div class="header-update">Posição: <strong id="hRef">—</strong><br><span id="hSub">—</span></div>
+    <button class="icon-btn" id="bDark" title="Alternar modo escuro" aria-label="Alternar modo escuro">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+    </button>
+    <button class="btn btn-ghost" id="bx">Exportar Excel</button>
+    <button class="btn btn-bronze" id="bp">Exportar PDF</button>
+  </div>
 </header>
+<nav class="tab-nav" role="tablist">
+  <button class="tab-btn active" data-tab="res">Resultado Geral</button>
+  <button class="tab-btn" data-tab="fx">Vencido por Faixa</button>
+  <button class="tab-btn" data-tab="av">A Vencer</button>
+  <button class="tab-btn" data-tab="prod">Por Produto</button>
+  <button class="tab-btn" data-tab="ana">Analítico</button>
+</nav>
+
 <main>
-  <div class="card">
-    <div class="filters">
+  <div class="filter-bar">
+    <div class="filter-grid">
       <label>Situação<select id="fSt"><option value="">Todas</option><option value="V">Vencido</option><option value="A">A vencer</option></select></label>
       <label>Ano de vencimento<select id="fAno"><option value="">Todos</option></select></label>
       <label>Mês de vencimento<select id="fMes"><option value="">Todos</option></select></label>
       <label>Loja / filial<select id="fLoja"><option value="">Todas</option></select></label>
-      <label>Buscar (devedor, CNPJ/CPF, NF)<input id="fQ" placeholder="texto…" style="width:220px"></label>
-      <button id="fClr">Limpar</button>
+      <label id="lQ"><span>Buscar (devedor, CNPJ/CPF, NF)</span><input id="fQ" placeholder="texto…" style="width:210px"></label>
     </div>
-    <div class="chips" id="chProd"></div>
-    <div class="chips" id="chFx"></div>
+    <div class="filter-row" id="chProd"></div>
+    <div class="filter-row" id="chFx"></div>
   </div>
-  <div class="tabs"><button data-t="res" class="on">Resumo</button><button data-t="ana">Analítico</button></div>
 
-  <section id="t-res">
-    <div class="kpis" id="kpis"></div>
-    <div class="card"><h2>Insights</h2><ul class="ins" id="ins"></ul></div>
-    <div class="grid2">
-      <div class="card"><h2>Vencido por faixa de atraso (por produto)</h2><div class="chart"><canvas id="c1"></canvas></div></div>
-      <div class="card"><h2>Vencido × a vencer por produto</h2><div class="chart"><canvas id="c2"></canvas></div></div>
-    </div>
-    <div class="card"><h2>A vencer por mês de vencimento</h2><div class="chart" style="height:240px"><canvas id="c3"></canvas></div></div>
-    <div class="card"><h2>Produto × faixa de atraso</h2><div class="scroll"><table id="mx"></table></div></div>
-    <div class="grid2">
-      <div class="card" id="cTop"><h2>Maiores devedores (vencido)</h2><div class="scroll"><table id="top"></table></div></div>
-      <div class="card"><h2>Lojas / filiais com maior vencido</h2><div class="scroll"><table id="lj"></table></div></div>
+  <section id="t-res" class="tabpane">
+    <div class="eyebrow">Visão consolidada</div><div class="sec-title">Resultado Geral</div><div class="sec-sub subline"></div>
+    <div class="kpi-grid" id="kpis"></div>
+    <div class="table-card"><div class="table-head"><div class="chart-title">Insights para decisão</div></div><div style="padding:14px 18px"><ul class="ins" id="ins"></ul></div></div>
+    <div class="chart-grid">
+      <div class="chart-card"><div class="chart-title">Vencido por faixa de atraso (por produto)</div><div class="chart-wrap"><canvas id="c1"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Vencido × a vencer por produto</div><div class="chart-wrap"><canvas id="c2"></canvas></div></div>
     </div>
   </section>
 
-  <section id="t-ana" class="hide">
-    <div class="card"><h2 id="anaH">Analítico</h2><div class="scroll"><table id="an"></table></div>
+  <section id="t-fx" class="tabpane hide">
+    <div class="eyebrow">Carteira em atraso</div><div class="sec-title">Vencido por Faixa</div><div class="sec-sub subline"></div>
+    <div class="kpi-grid" id="fxK"></div>
+    <div class="chart-grid">
+      <div class="chart-card"><div class="chart-title">Vencido por faixa de atraso</div><div class="chart-wrap"><canvas id="c3"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Agendas × cheques por faixa</div><div class="chart-wrap"><canvas id="c4"></canvas></div></div>
+    </div>
+    <div class="table-card"><div class="table-head"><div class="chart-title">Produto × faixa de atraso</div></div><div class="scroll"><table id="mx"></table></div></div>
+    <div class="chart-grid">
+      <div class="table-card" id="cTop" style="margin:0"><div class="table-head"><div class="chart-title">Maiores devedores (vencido)</div></div><div class="scroll"><table id="top"></table></div></div>
+      <div class="table-card" style="margin:0"><div class="table-head"><div class="chart-title">Lojas / filiais com maior vencido</div></div><div class="scroll"><table id="lj"></table></div></div>
+    </div>
+  </section>
+
+  <section id="t-av" class="tabpane hide">
+    <div class="eyebrow">Carteira a receber</div><div class="sec-title">A Vencer</div><div class="sec-sub subline"></div>
+    <div class="kpi-grid" id="avK"></div>
+    <div class="chart-grid">
+      <div class="chart-card"><div class="chart-title">A vencer por mês de vencimento</div><div class="chart-wrap"><canvas id="c5"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">A vencer por produto e janela</div><div class="chart-wrap"><canvas id="c6"></canvas></div></div>
+    </div>
+    <div class="table-card"><div class="table-head"><div class="chart-title">Produto × janela de vencimento</div></div><div class="scroll"><table id="avT"></table></div></div>
+  </section>
+
+  <section id="t-prod" class="tabpane hide">
+    <div class="eyebrow">Por agenda</div><div class="sec-title">Por Produto</div><div class="sec-sub subline"></div>
+    <div class="prod-grid" id="pg"></div>
+  </section>
+
+  <section id="t-ana" class="tabpane hide">
+    <div class="eyebrow">Registro a registro</div><div class="sec-title">Analítico</div><div class="sec-sub subline"></div>
+    <div class="table-card"><div class="table-head"><div class="chart-title" id="anaH">Analítico</div></div><div class="scroll"><table id="an"></table></div>
       <div class="pg"><button id="pv">‹</button><span id="pi"></span><button id="pn">›</button></div></div>
   </section>
 </main>
+
 <script>
 const DATA=/*DATA*/null;
-const FX=[["1–30",1,30],["31–60",31,60],["61–90",61,90],["91–180",91,180],["181–360",181,360],["361–720",361,720],[">720",721,1e9]];
-const MESES=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
 const PUB=!!DATA.pub;
+const FX=[["1–30",1,30],["31–60",31,60],["61–90",61,90],["91–180",91,180],["181–360",181,360],["361–720",361,720],[">720",721,1e9]];
+const FXC=["#9DB7CF","#6F97BA","#D6A94E","#D58A3C","#C4572F","#A12D2D","#5E1A1A"];
+const JAN=[["Até 7 dias",0,7],["8–30",8,30],["31–60",31,60],["61–90",61,90],["91–365",91,365],[">365",366,1e9]];
+const JANC=["#2F6690","#5B8DB8","#8DB0CC","#B08A4B","#C9A566","#7B8794"];
+const MESES=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+const PCOL=["#2F6690","#B08A4B","#4C8C7A","#7A5C8E","#B5533C","#5B7A99","#8C8C5A","#A0718A","#3E4C5E"];
 const $=id=>document.getElementById(id);
 const brl=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const mi=v=>Math.abs(v)>=1e6?"R$ "+(v/1e6).toFixed(2).replace(".",",")+" mi":Math.abs(v)>=1e3?"R$ "+(v/1e3).toFixed(0)+" mil":brl(v);
 const pct=v=>(v*100).toFixed(1).replace(".",",")+"%";
+const num=v=>v.toLocaleString("pt-BR");
 const dmy=s=>s?s.split("-").reverse().join("/"):"";
 const fxOf=a=>a<=0?-1:FX.findIndex(f=>a>=f[1]&&a<=f[2]);
 const PN=Object.fromEntries(DATA.prods.map(p=>[p[0],p[1]]));
-const COLORS=["#1f4e9c","#e67e22","#27ae60","#8e44ad","#c0392b","#16a085","#f1c40f","#7f8c8d","#d35400","#2c3e50"];
+const PC=Object.fromEntries(DATA.prods.map((p,i)=>[p[0],PCOL[i%PCOL.length]]));
+const REF=new Date(DATA.ref+"T00:00");
 const R=DATA.rows.map(r=>({p:r[0],s:r[1],a:r[2],v:r[3],val:r[4],dev:DATA.devs[r[5]],doc:r[6],loja:DATA.lojas[r[7]]||"(sem loja)",nf:r[8],par:r[9],em:r[10],port:r[11],
-  f:fxOf(r[2]),ano:+r[3].slice(0,4),mes:+r[3].slice(5,7)}));
+  f:fxOf(r[2]),ano:+r[3].slice(0,4),mes:+r[3].slice(5,7),d:r[1]=="A"?Math.round((new Date(r[3]+"T00:00")-REF)/864e5):0}));
 const F={prods:new Set(),fx:new Set(),st:"",ano:"",mes:"",loja:"",q:""};
-let cur=[],charts=[],sortK="val",sortD=-1,page=0;const PS=100;
+let cur=[],tab="res",sortK="val",sortD=-1,page=0;const PS=100,charts={};
 const sum=(a,k="val")=>a.reduce((s,r)=>s+r[k],0);
 const group=(a,fn)=>{const m=new Map();a.forEach(r=>{const k=fn(r);(m.get(k)||m.set(k,[]).get(k)).push(r)});return m};
+const isDark=()=>document.body.classList.contains("dark");
+
+function theme(){Chart.defaults.font.family="Manrope, system-ui, sans-serif";Chart.defaults.color=isDark()?"#9FB0C6":"#52606F";Chart.defaults.borderColor=isDark()?"#26364A":"#E2E8F0"}
+function mk(id,cfg){if(charts[id])charts[id].destroy();charts[id]=new Chart($(id),cfg)}
+const ax=v=>mi(v), tip={callbacks:{label:c=>`${c.dataset.label}: ${brl(c.parsed.y??c.parsed.x)}`}};
+const kc=(label,value,sub,cls="",p=null)=>`<div class="kpi-card ${cls}"><div class="kpi-label">${label}</div><div class="kpi-value">${value}</div><div class="kpi-sub">${sub}</div>${p==null?"":`<div class="bar"><i style="width:${Math.min(100,Math.max(0,p*100)).toFixed(1)}%"></i></div>`}</div>`;
+const tbl=(head,rows)=>"<thead><tr>"+head.map(h=>`<th>${h}</th>`).join("")+"</tr></thead><tbody>"+rows.join("")+"</tbody>";
 
 function init(){
-  $("sub").textContent=`Posição de ${dmy(DATA.ref)} (extração ${DATA.pasta}) · ${R.length.toLocaleString("pt-BR")} títulos/cheques`;
+  $("hRef").textContent=dmy(DATA.ref);
+  $("hSub").textContent=`Extração ${DATA.pasta}${PUB?" · versão pública":""}`;
   const anos=[...new Set(R.map(r=>r.ano))].sort((a,b)=>b-a);
   $("fAno").innerHTML+=anos.map(a=>`<option>${a}</option>`).join("");
   $("fMes").innerHTML+=MESES.map((m,i)=>`<option value="${i+1}">${m}</option>`).join("");
   $("fLoja").innerHTML+=[...new Set(R.map(r=>r.loja))].sort().map(l=>`<option>${l}</option>`).join("");
-  $("chProd").innerHTML="<b style='font-size:12px;color:var(--mut)'>Produto:</b>"+DATA.prods.map(p=>`<span class="chip" data-p="${p[0]}">${p[1]} (${p[0]})</span>`).join("");
-  $("chFx").innerHTML="<b style='font-size:12px;color:var(--mut)'>Faixa de atraso (dias):</b>"+FX.map((f,i)=>`<span class="chip" data-f="${i}">${f[0]}</span>`).join("");
+  $("chProd").innerHTML='<span class="filter-label">Produto</span>'+DATA.prods.map(p=>`<span class="pill" data-p="${p[0]}">${p[1]}</span>`).join("")+'<span class="pill clear" id="fClr">Limpar filtros</span>';
+  $("chFx").innerHTML='<span class="filter-label">Faixa (dias)</span>'+FX.map((f,i)=>`<span class="pill" data-f="${i}">${f[0]}</span>`).join("");
   $("chProd").onclick=e=>{const p=e.target.dataset.p;if(!p)return;F.prods.has(p)?F.prods.delete(p):F.prods.add(p);e.target.classList.toggle("on");upd()};
   $("chFx").onclick=e=>{if(e.target.dataset.f==null)return;const f=+e.target.dataset.f;F.fx.has(f)?F.fx.delete(f):F.fx.add(f);e.target.classList.toggle("on");upd()};
   for(const [id,k] of [["fSt","st"],["fAno","ano"],["fMes","mes"],["fLoja","loja"]])$(id).onchange=e=>{F[k]=e.target.value;upd()};
   let t;$("fQ").oninput=e=>{clearTimeout(t);t=setTimeout(()=>{F.q=e.target.value.trim().toLowerCase();upd()},250)};
-  $("fClr").onclick=()=>{F.prods.clear();F.fx.clear();Object.assign(F,{st:"",ano:"",mes:"",loja:"",q:""});
-    document.querySelectorAll(".filters select").forEach(s=>s.value="");$("fQ").value="";document.querySelectorAll(".chip.on").forEach(c=>c.classList.remove("on"));upd()};
-  document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
-    $("t-res").classList.toggle("hide",b.dataset.t!="res");$("t-ana").classList.toggle("hide",b.dataset.t!="ana")});
+  $("fClr").onclick=limpar;
+  document.querySelectorAll(".tab-btn").forEach(b=>b.onclick=()=>show(b.dataset.tab));
   $("pv").onclick=()=>{page=Math.max(0,page-1);anal()};$("pn").onclick=()=>{page++;anal()};
   $("bx").onclick=xlsx;$("bp").onclick=pdf;
-  if(PUB){$("cTop").classList.add("hide");$("fQ").parentNode.firstChild.textContent="Buscar (NF / cheque)";$("sub").textContent+=" · versão pública (sem identificação de devedores)"}
-  upd();
+  $("bDark").onclick=()=>{document.body.classList.toggle("dark");try{localStorage.setItem("pj-dark",isDark()?"1":"0")}catch(e){}theme();TABS[tab]()};
+  let dk=matchMedia("(prefers-color-scheme:dark)").matches;try{const s=localStorage.getItem("pj-dark");if(s!=null)dk=s=="1"}catch(e){}
+  document.body.classList.toggle("dark",dk);
+  if(PUB){$("cTop").classList.add("hide");$("lQ").firstChild.textContent="Buscar (NF / cheque)"}
+  theme();upd();
 }
+function limpar(){F.prods.clear();F.fx.clear();Object.assign(F,{st:"",ano:"",mes:"",loja:"",q:""});
+  document.querySelectorAll(".filter-grid select").forEach(s=>s.value="");$("fQ").value="";document.querySelectorAll(".pill.on").forEach(c=>c.classList.remove("on"));upd()}
 
 function filtra(){
   return R.filter(r=>(!F.prods.size||F.prods.has(r.p))&&(!F.st||r.s==F.st)&&(!F.ano||r.ano==F.ano)&&(!F.mes||r.mes==F.mes)&&(!F.loja||r.loja==F.loja)
     &&(!F.fx.size||F.fx.has(r.f))&&(!F.q||(r.dev+" "+r.doc+" "+r.nf).toLowerCase().includes(F.q)));
 }
-function upd(){page=0;cur=filtra();kpis();insights();graficos();tabelas();anal()}
+function filtroTxt(){
+  const p=[F.st&&(F.st=="V"?"Vencido":"A vencer"),F.prods.size&&[...F.prods].map(c=>PN[c]).join(", "),F.fx.size&&"Faixas: "+[...F.fx].sort().map(i=>FX[i][0]).join(", "),
+    F.ano&&"Ano "+F.ano,F.mes&&"Mês "+MESES[F.mes-1],F.loja&&F.loja,F.q&&`Busca "${F.q}"`].filter(Boolean);
+  return p.length?p.join(" · "):"Sem filtros (carteira completa)";
+}
+const TABS={res:rRes,fx:rFx,av:rAv,prod:rProd,ana:anal};
+function show(t){tab=t;document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab==t));
+  document.querySelectorAll(".tabpane").forEach(p=>p.classList.toggle("hide",p.id!="t-"+t));TABS[t]()}
+function upd(){page=0;cur=filtra();
+  document.querySelectorAll(".subline").forEach(e=>e.textContent=`${filtroTxt()} · ${num(cur.length)} registros`);
+  insights();TABS[tab]()}
 
-function kpis(){
-  const V=cur.filter(r=>r.s=="V"),A=cur.filter(r=>r.s=="A"),vv=sum(V),va=sum(A);
-  const atr=vv?V.reduce((s,r)=>s+r.a*r.val,0)/vv:0;
-  const k=[["Carteira total",mi(vv+va),`${cur.length.toLocaleString("pt-BR")} títulos`],["Vencido",mi(vv),`${V.length.toLocaleString("pt-BR")} títulos`],
-    ["A vencer",mi(va),`${A.length.toLocaleString("pt-BR")} títulos`],["% vencido",vv+va?pct(vv/(vv+va)):"–","do total filtrado"],
-    ["Atraso médio (pond. por valor)",Math.round(atr).toLocaleString("pt-BR")+" dias",`${(atr/365).toFixed(1).replace(".",",")} anos`]]
-    .concat(PUB?[]:[["Devedores distintos",new Set(V.map(r=>r.dev)).size.toLocaleString("pt-BR"),"com vencido"]]);
-  $("kpis").innerHTML=k.map(x=>`<div class="kpi"><span>${x[0]}</span><b>${x[1]}</b><i>${x[2]}</i></div>`).join("");
+/* ── Resultado Geral ── */
+function rRes(){
+  const V=cur.filter(r=>r.s=="V"),A=cur.filter(r=>r.s=="A"),vv=sum(V),va=sum(A),tot=vv+va;
+  const atr=vv?V.reduce((s,r)=>s+r.a*r.val,0)/vv:0,old=sum(V.filter(r=>r.f>=5));
+  const k=[kc("Carteira total",mi(tot),`${num(cur.length)} títulos`,"navy"),
+    kc("Vencido",mi(vv),`${num(V.length)} títulos`,"red"),
+    kc("A vencer",mi(va),`${num(A.length)} títulos`),
+    kc("% vencido",tot?pct(vv/tot):"–","do total filtrado","",tot?vv/tot:0),
+    kc("Atraso médio",num(Math.round(atr))+" dias",`${(atr/365).toFixed(1).replace(".",",")} anos · pond. por valor`),
+    kc("Vencido > 360 dias",vv?pct(old/vv):"–",mi(old),"gold",vv?old/vv:0)];
+  if(!PUB)k.push(kc("Devedores",num(new Set(V.map(r=>r.dev)).size),"com valor vencido"));
+  $("kpis").innerHTML=k.join("");
+  theme();
+  const ps=DATA.prods.filter(p=>cur.some(r=>r.p==p[0]));
+  mk("c1",{type:"bar",data:{labels:FX.map(f=>f[0]+" d"),datasets:ps.map(p=>({label:p[1],backgroundColor:PC[p[0]],data:FX.map((_,j)=>sum(V.filter(r=>r.p==p[0]&&r.f==j)))}))},
+    options:{maintainAspectRatio:false,scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{callback:ax}}},plugins:{tooltip:tip,legend:{labels:{boxWidth:10,font:{size:10}}}}}});
+  mk("c2",{type:"bar",data:{labels:ps.map(p=>p[1]),datasets:[
+    {label:"Vencido",backgroundColor:"#A12D2D",data:ps.map(p=>sum(cur.filter(r=>r.p==p[0]&&r.s=="V")))},
+    {label:"A vencer",backgroundColor:"#2F6690",data:ps.map(p=>sum(cur.filter(r=>r.p==p[0]&&r.s=="A")))}]},
+    options:{indexAxis:"y",maintainAspectRatio:false,scales:{x:{stacked:true,ticks:{callback:ax}},y:{stacked:true,grid:{display:false}}},plugins:{tooltip:tip}}});
 }
 
 function insights(){
   const V=cur.filter(r=>r.s=="V"),vv=sum(V),out=[];
   if(!V.length){$("ins").innerHTML="<li>Sem vencido no filtro atual.</li>";return}
-  const byFx=FX.map((_,i)=>sum(V.filter(r=>r.f==i)));
-  const old=byFx[5]+byFx[6],rec=byFx[0]+byFx[1];
+  const byFx=FX.map((_,i)=>sum(V.filter(r=>r.f==i))),old=byFx[5]+byFx[6],rec=byFx[0]+byFx[1];
   out.push(["r",`<b>${pct(old/vv)}</b> do vencido (${mi(old)}) tem mais de 360 dias de atraso — dificilmente recuperável pela cobrança comum; candidato a revisão de provisão/baixa ou cobrança jurídica.`]);
   out.push(["g",`<b>${mi(rec)}</b> (${pct(rec/vv)}) está em até 60 dias — janela de maior recuperação; priorizar régua de cobrança aqui.`]);
   if(!PUB){const dv=[...group(V,r=>r.dev)].map(([k,a])=>[k,sum(a)]).sort((a,b)=>b[1]-a[1]);
-  const t10=dv.slice(0,10).reduce((s,x)=>s+x[1],0);
-  out.push(["a",`Os 10 maiores devedores concentram <b>${pct(t10/vv)}</b> do vencido; o maior é <b>${dv[0][0]}</b> (${mi(dv[0][1])}).`])}
+    const t10=dv.slice(0,10).reduce((s,x)=>s+x[1],0);
+    out.push(["a",`Os 10 maiores devedores concentram <b>${pct(t10/vv)}</b> do vencido; o maior é <b>${dv[0][0]}</b> (${mi(dv[0][1])}).`])}
   const pr=[...group(cur.filter(r=>r.p!="CHQ"),r=>r.p)].map(([k,a])=>{const v=sum(a.filter(r=>r.s=="V")),t=sum(a);return[k,v,t,t?v/t:0]}).filter(x=>x[2]>0).sort((a,b)=>b[3]-a[3]);
   if(pr.length>1)out.push(["r",`Maior taxa de inadimplência (vencido ÷ carteira): <b>${PN[pr[0][0]]}</b> com ${pct(pr[0][3])}; menor: ${PN[pr.at(-1)[0]]} (${pct(pr.at(-1)[3])}).`]);
   const pv=[...group(V,r=>r.p)].map(([k,a])=>[k,sum(a)]).sort((a,b)=>b[1]-a[1]);
   out.push(["a",`<b>${PN[pv[0][0]]}</b> responde por ${pct(pv[0][1]/vv)} do vencido (${mi(pv[0][1])}).`]);
   const lj=[...group(V,r=>r.loja)].map(([k,a])=>[k,sum(a)]).sort((a,b)=>b[1]-a[1])[0];
   out.push(["",`Loja/filial com mais vencido: <b>${lj[0]}</b> (${mi(lj[1])}, ${pct(lj[1]/vv)}).`]);
-  const A=cur.filter(r=>r.s=="A"),ref=new Date(DATA.ref+"T00:00"),lim=new Date(+ref+30*864e5).toISOString().slice(0,10);
-  const p30=sum(A.filter(r=>r.v<=lim));
-  if(A.length)out.push(["a",`<b>${mi(p30)}</b> vence nos próximos 30 dias — acompanhar de perto: é o que vira atraso 1–30 se não for pago.`]);
+  const A=cur.filter(r=>r.s=="A"),p30=sum(A.filter(r=>r.d<=30));
+  if(A.length)out.push(["a",`<b>${mi(p30)}</b> vence nos próximos 30 dias — é o que vira atraso 1–30 se não for pago.`]);
   const peq=V.filter(r=>r.val<500);
-  if(peq.length>50)out.push(["",`${peq.length.toLocaleString("pt-BR")} títulos vencidos têm valor abaixo de R$ 500 (somam ${mi(sum(peq))}) — custo de cobrança individual pode superar o valor; avaliar tratamento em lote.`]);
+  if(peq.length>50)out.push(["",`${num(peq.length)} títulos vencidos têm valor abaixo de R$ 500 (somam ${mi(sum(peq))}) — o custo de cobrança individual pode superar o valor; avaliar tratamento em lote.`]);
+  const big=V.reduce((m,r)=>r.val>m.val?r:m,V[0]);
+  if(big.val>0.2*vv)out.push(["r",`Um único registro (${PN[big.p]}, ${dmy(big.v)}) vale ${mi(big.val)} — ${pct(big.val/vv)} do vencido filtrado. Conferir se o valor está correto na origem.`]);
   $("ins").innerHTML=out.map(x=>`<li class="${x[0]}">${x[1]}</li>`).join("");
 }
 
-function graficos(){
-  charts.forEach(c=>c.destroy());charts=[];
-  const dark=matchMedia("(prefers-color-scheme:dark)").matches,tc=dark?"#9aa3b5":"#667085";
-  Chart.defaults.color=tc;Chart.defaults.borderColor=dark?"#2c3341":"#e3e6ec";
-  const V=cur.filter(r=>r.s=="V"),ps=DATA.prods.filter(p=>cur.some(r=>r.p==p[0]));
-  const tip={callbacks:{label:c=>`${c.dataset.label}: ${brl(c.parsed.y??c.parsed.x)}`}};
-  const ax=v=>mi(v);
-  charts.push(new Chart($("c1"),{type:"bar",data:{labels:FX.map(f=>f[0]+" d"),datasets:ps.map((p,i)=>({label:p[1],backgroundColor:COLORS[DATA.prods.indexOf(p)],
-    data:FX.map((_,j)=>sum(V.filter(r=>r.p==p[0]&&r.f==j)))}))},options:{maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:ax}}},plugins:{tooltip:tip,legend:{labels:{boxWidth:10,font:{size:10}}}}}}));
-  charts.push(new Chart($("c2"),{type:"bar",data:{labels:ps.map(p=>p[1]),datasets:[
-    {label:"Vencido",backgroundColor:"#c0392b",data:ps.map(p=>sum(cur.filter(r=>r.p==p[0]&&r.s=="V")))},
-    {label:"A vencer",backgroundColor:"#27ae60",data:ps.map(p=>sum(cur.filter(r=>r.p==p[0]&&r.s=="A")))}]},
-    options:{indexAxis:"y",maintainAspectRatio:false,scales:{x:{stacked:true,ticks:{callback:ax}},y:{stacked:true}},plugins:{tooltip:tip}}}));
-  const A=cur.filter(r=>r.s=="A"),lim=DATA.ref.slice(0,4)*12+ +DATA.ref.slice(5,7)+17,m=new Map();
-  A.forEach(r=>{const k=(+r.v.slice(0,4))*12+ +r.v.slice(5,7);const b=Math.min(k,lim+1);m.set(b,(m.get(b)||0)+r.val)});
-  const ks=[...m.keys()].sort((a,b)=>a-b),lab=k=>k>lim?"Depois":MESES[(k-1)%12]+"/"+String(Math.floor((k-1)/12)).slice(2);
-  charts.push(new Chart($("c3"),{type:"bar",data:{labels:ks.map(lab),datasets:[{label:"A vencer",backgroundColor:"#27ae60",data:ks.map(k=>m.get(k))}]},
-    options:{maintainAspectRatio:false,scales:{y:{ticks:{callback:ax}}},plugins:{tooltip:tip,legend:{display:false}}}}));
-}
-
+/* ── Vencido por Faixa ── */
 function matriz(a=cur){
   const rows=DATA.prods.filter(p=>a.some(r=>r.p==p[0])).map(p=>{const x=a.filter(r=>r.p==p[0]),V=x.filter(r=>r.s=="V"),vv=sum(V),va=sum(x.filter(r=>r.s=="A"));
     return[p[1],...FX.map((_,j)=>sum(V.filter(r=>r.f==j))),vv,va,vv+va,vv+va?vv/(vv+va):0]});
-  const tot=["Total",...Array(FX.length+3).fill(0).map((_,i)=>rows.reduce((s,r)=>s+r[i+1],0))];tot.push(tot[FX.length+3]?tot[FX.length+1]/tot[FX.length+3]:0);
+  const n=FX.length+3,tot=["Total",...Array(n).fill(0).map((_,i)=>rows.reduce((s,r)=>s+r[i+1],0))];tot.push(tot[n]?tot[FX.length+1]/tot[n]:0);
   return{head:["Produto",...FX.map(f=>f[0]),"Vencido","A vencer","Total","% venc."],rows:[...rows,tot]};
 }
-function tabelas(){
-  const m=matriz(),fm=(r,i)=>i==r.length-1?pct(r[i]):brl(r[i]);
-  $("mx").innerHTML="<tr>"+m.head.map((h,i)=>`<th class="${i?"n":""}">${h}</th>`).join("")+"</tr>"+
-    m.rows.map((r,k)=>`<tr class="${k==m.rows.length-1?"tot":""}">`+r.map((c,i)=>i?`<td class="n">${fm(r,i)}</td>`:`<td>${c}</td>`).join("")+"</tr>").join("");
+function rFx(){
   const V=cur.filter(r=>r.s=="V"),vv=sum(V);
-  const tab=(id,key,hd)=>{const g=[...group(V,key)].map(([k,a])=>[k,a.length,sum(a)]).sort((a,b)=>b[2]-a[2]).slice(0,15);
-    $(id).innerHTML=`<tr><th>${hd}</th><th class="n">Títulos</th><th class="n">Vencido</th><th class="n">% do vencido</th></tr>`+g.map(x=>`<tr><td>${x[0]}</td><td class="n">${x[1]}</td><td class="n">${brl(x[2])}</td><td class="n">${pct(x[2]/vv)}</td></tr>`).join("")};
-  if(!PUB)tab("top",r=>r.dev+" · "+r.doc,"Devedor");tab("lj",r=>r.loja,"Loja");
+  $("fxK").innerHTML=FX.map((f,i)=>{const x=V.filter(r=>r.f==i),v=sum(x);return kc(f[0]+" dias",mi(v),`${vv?pct(v/vv):"–"} do vencido · ${num(x.length)} títulos`,i>=5?"red":"",vv?v/vv:0)}).join("");
+  theme();
+  mk("c3",{type:"bar",data:{labels:FX.map(f=>f[0]+" d"),datasets:[{label:"Vencido",backgroundColor:FXC,data:FX.map((_,j)=>sum(V.filter(r=>r.f==j)))}]},
+    options:{maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{ticks:{callback:ax}}},plugins:{tooltip:tip,legend:{display:false}}}});
+  mk("c4",{type:"bar",data:{labels:FX.map(f=>f[0]+" d"),datasets:[
+    {label:"Agendas",backgroundColor:"#2F6690",data:FX.map((_,j)=>sum(V.filter(r=>r.p!="CHQ"&&r.f==j)))},
+    {label:"Cheques",backgroundColor:"#3E4C5E",data:FX.map((_,j)=>sum(V.filter(r=>r.p=="CHQ"&&r.f==j)))}]},
+    options:{maintainAspectRatio:false,scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{callback:ax}}},plugins:{tooltip:tip}}});
+  const m=matriz(),L=m.head.length-1;
+  $("mx").innerHTML=tbl(m.head,m.rows.map((r,k)=>`<tr class="${k==m.rows.length-1?"tot":""}">`+r.map((c,i)=>i==0?`<td>${c}</td>`:i==L?`<td class="${c>.5?"td-neg":""}">${pct(c)}</td>`:`<td class="${c==0?"td-mut":""}">${brl(c)}</td>`).join("")+"</tr>"));
+  const tab2=(id,key,hd)=>{const g=[...group(V,key)].map(([k,a])=>[k,a.length,sum(a)]).sort((a,b)=>b[2]-a[2]).slice(0,15);
+    $(id).innerHTML=tbl([hd,"Títulos","Vencido","% do vencido"],g.map(x=>`<tr><td>${x[0]}</td><td>${num(x[1])}</td><td>${brl(x[2])}</td><td>${pct(x[2]/vv)}</td></tr>`))};
+  if(!PUB)tab2("top",r=>r.dev+" · "+r.doc,"Devedor");tab2("lj",r=>r.loja,"Loja");
 }
 
-const COLS0=[["p","Produto",r=>PN[r.p]],["s","Situação",r=>r.s=="V"?"Vencido":"A vencer"],["f","Faixa",r=>r.f<0?"A vencer":FX[r.f][0]],["a","Atraso (d)",r=>r.a],["v","Vencimento",r=>dmy(r.v)],
-  ["val","Valor",r=>r.val],["dev","Devedor",r=>r.dev],["doc","CNPJ/CPF ou código",r=>r.doc],["loja","Loja",r=>r.loja],["nf","NF / Cheque",r=>r.nf],["par","Parcela",r=>r.par||""],["em","Emissão",r=>dmy(r.em)],["port","Agenda / Portador",r=>r.port]];
-const NOM=["dev","doc"];
-const COLS=COLS0.filter(c=>!(PUB&&NOM.includes(c[0])));
+/* ── A Vencer ── */
+function rAv(){
+  const A=cur.filter(r=>r.s=="A"),va=sum(A);
+  $("avK").innerHTML=[kc("Total a vencer",mi(va),`${num(A.length)} títulos`,"navy"),
+    ...JAN.map(j=>{const x=A.filter(r=>r.d>=j[1]&&r.d<=j[2]),v=sum(x);return kc(j[0],mi(v),`${va?pct(v/va):"–"} · ${num(x.length)} títulos`,"",va?v/va:0)})].join("");
+  theme();
+  const lim=REF.getFullYear()*12+REF.getMonth()+1+17,m=new Map();
+  A.forEach(r=>{const k=r.ano*12+r.mes,b=Math.min(k,lim+1);m.set(b,(m.get(b)||0)+r.val)});
+  const ks=[...m.keys()].sort((a,b)=>a-b),lab=k=>k>lim?"Depois":MESES[(k-1)%12]+"/"+String(Math.floor((k-1)/12)).slice(2);
+  mk("c5",{type:"bar",data:{labels:ks.map(lab),datasets:[{label:"A vencer",backgroundColor:"#2F6690",data:ks.map(k=>m.get(k))}]},
+    options:{maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{ticks:{callback:ax}}},plugins:{tooltip:tip,legend:{display:false}}}});
+  const ps=DATA.prods.filter(p=>A.some(r=>r.p==p[0]));
+  mk("c6",{type:"bar",data:{labels:ps.map(p=>p[1]),datasets:JAN.map((j,i)=>({label:j[0],backgroundColor:JANC[i],data:ps.map(p=>sum(A.filter(r=>r.p==p[0]&&r.d>=j[1]&&r.d<=j[2])))}))},
+    options:{indexAxis:"y",maintainAspectRatio:false,scales:{x:{stacked:true,ticks:{callback:ax}},y:{stacked:true,grid:{display:false}}},plugins:{tooltip:tip,legend:{labels:{boxWidth:10,font:{size:10}}}}}});
+  const rows=ps.map(p=>{const x=A.filter(r=>r.p==p[0]);return[p[1],...JAN.map(j=>sum(x.filter(r=>r.d>=j[1]&&r.d<=j[2]))),sum(x)]});
+  const tot=["Total",...Array(JAN.length+1).fill(0).map((_,i)=>rows.reduce((s,r)=>s+r[i+1],0))];
+  $("avT").innerHTML=tbl(["Produto",...JAN.map(j=>j[0]),"Total"],[...rows,tot].map((r,k)=>`<tr class="${k==rows.length?"tot":""}">`+r.map((c,i)=>i?`<td class="${c==0?"td-mut":""}">${brl(c)}</td>`:`<td>${c}</td>`).join("")+"</tr>"));
+}
+
+/* ── Por Produto ── */
+function rProd(){
+  $("pg").innerHTML=DATA.prods.filter(p=>cur.some(r=>r.p==p[0])).map(p=>{
+    const x=cur.filter(r=>r.p==p[0]),V=x.filter(r=>r.s=="V"),vv=sum(V),va=sum(x.filter(r=>r.s=="A")),tot=vv+va;
+    const seg=FX.map((_,j)=>sum(V.filter(r=>r.f==j)));
+    const ag=p[0]=="CHQ"?"Portadores 130, 230, 280 e 281":"Agenda "+(p[0]=="163"?"162 e 163":p[0]);
+    return`<div class="prod-card" style="border-top-color:${PC[p[0]]}"><h3>${p[1]}</h3><div class="cod">${ag}</div>
+      <div class="prod-nums"><div><span>Carteira</span><b>${mi(tot)}</b></div><div><span>Vencido</span><b class="td-neg">${mi(vv)}</b></div><div><span>% vencido</span><b>${tot?pct(vv/tot):"–"}</b></div></div>
+      <div class="stack" title="Vencido por faixa">${seg.map((v,j)=>vv?`<i style="width:${v/vv*100}%;background:${FXC[j]}"></i>`:"").join("")}</div>
+      <div class="legend">${FX.map((f,j)=>seg[j]?`<span><em style="background:${FXC[j]}"></em>${f[0]}: ${mi(seg[j])}</span>`:"").join("")||"<span>Sem vencido</span>"}</div>
+      <div class="legend" style="margin-top:6px"><span>A vencer: <b>${mi(va)}</b></span><span>${num(V.length)} vencidos · ${num(x.length-V.length)} a vencer</span></div>
+      <button class="btn" data-go="${p[0]}">Ver analítico</button></div>`}).join("")||"<p>Nenhum dado no filtro atual.</p>";
+  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{limpar();F.prods.add(b.dataset.go);document.querySelector(`#chProd [data-p="${b.dataset.go}"]`).classList.add("on");upd();show("ana")});
+}
+
+/* ── Analítico ── */
+const COLS0=[["p","Produto",r=>PN[r.p]],["s","Situação",r=>r.s=="V"?"Vencido":"A vencer"],["f","Faixa",r=>r.f<0?"A vencer":FX[r.f][0]],["a","Atraso (d)",r=>Math.max(0,r.a)],["v","Vencimento",r=>dmy(r.v)],
+  ["val","Valor",r=>brl(r.val)],["dev","Devedor",r=>r.dev],["doc","CNPJ/CPF ou código",r=>r.doc],["loja","Loja",r=>r.loja],["nf","NF / Cheque",r=>r.nf],["par","Parcela",r=>r.par||""],["em","Emissão",r=>dmy(r.em)],["port","Agenda / Portador",r=>r.port]];
+const COLS=COLS0.filter(c=>!(PUB&&["dev","doc"].includes(c[0])));
 function anal(){
   const a=[...cur].sort((x,y)=>(x[sortK]>y[sortK]?1:x[sortK]<y[sortK]?-1:0)*sortD),np=Math.max(1,Math.ceil(a.length/PS));page=Math.min(page,np-1);
-  $("anaH").textContent=`Analítico — ${a.length.toLocaleString("pt-BR")} registros · ${brl(sum(a))}`;
-  $("an").innerHTML="<tr>"+COLS.map(c=>`<th class="s ${c[0]=="val"||c[0]=="a"?"n":""}" data-k="${c[0]}">${c[1]}${sortK==c[0]?(sortD>0?" ▲":" ▼"):""}</th>`).join("")+"</tr>"+
-    a.slice(page*PS,page*PS+PS).map(r=>"<tr>"+COLS.map(c=>c[0]=="val"?`<td class="n">${brl(r.val)}</td>`:c[0]=="a"?`<td class="n">${r.a>0?r.a:0}</td>`:`<td>${c[2](r)}</td>`).join("")+"</tr>").join("");
+  $("anaH").textContent=`${num(a.length)} registros · ${brl(sum(a))}`;
+  $("an").innerHTML="<thead><tr>"+COLS.map(c=>`<th class="s" data-k="${c[0]}" style="${["val","a"].includes(c[0])?"":"text-align:left"}">${c[1]}${sortK==c[0]?(sortD>0?" ▲":" ▼"):""}</th>`).join("")+"</tr></thead><tbody>"+
+    a.slice(page*PS,page*PS+PS).map(r=>"<tr>"+COLS.map(c=>`<td class="${["val","a"].includes(c[0])?"":"l"}">${c[2](r)}</td>`).join("")+"</tr>").join("")+"</tbody>";
   document.querySelectorAll("#an th").forEach(th=>th.onclick=()=>{const k=th.dataset.k;sortD=sortK==k?-sortD:-1;sortK=k;anal()});
   $("pi").textContent=`Página ${page+1} de ${np}`;
 }
 
-function filtroTxt(){
-  const p=[F.st&&(F.st=="V"?"Vencido":"A vencer"),F.prods.size&&[...F.prods].map(c=>PN[c]).join(", "),F.fx.size&&"Faixas: "+[...F.fx].sort().map(i=>FX[i][0]).join(", "),
-    F.ano&&"Ano "+F.ano,F.mes&&"Mês "+MESES[F.mes-1],F.loja&&F.loja,F.q&&`Busca "${F.q}"`].filter(Boolean);
-  return p.length?p.join(" · "):"Sem filtros (carteira completa)";
-}
+/* ── Exportações ── */
 const stamp=()=>new Date().toISOString().slice(0,10);
 function xlsx(){
   const m=matriz(),wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["Inadimplência Produtos PJ Condor"],["Posição",dmy(DATA.ref)],["Filtros",filtroTxt()],[],m.head,...m.rows]),"Resumo");
   const a=[...cur].sort((x,y)=>y.val-x.val).map(r=>({Produto:PN[r.p],"Situação":r.s=="V"?"Vencido":"A vencer",Faixa:r.f<0?"A vencer":FX[r.f][0]+" d","Atraso (dias)":Math.max(0,r.a),
-    Vencimento:dmy(r.v),Valor:r.val,Loja:r.loja,Parcela:r.par||"","Agenda / Portador":r.port,"NF/Cheque":r.nf,"Emissão":dmy(r.em),...(PUB?{}:{Devedor:r.dev,"CNPJ/CPF ou código":r.doc})}));
+    Vencimento:dmy(r.v),Valor:r.val,Loja:r.loja,"NF/Cheque":r.nf,Parcela:r.par||"","Emissão":dmy(r.em),"Agenda / Portador":r.port,...(PUB?{}:{Devedor:r.dev,"CNPJ/CPF ou código":r.doc})}));
   XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(a),"Analítico");
   XLSX.writeFile(wb,`inadimplencia_pj_${stamp()}.xlsx`);
 }
 function pdf(){
-  const {jsPDF}=window.jspdf,d=new jsPDF({orientation:"landscape",unit:"pt",format:"a4"}),W=d.internal.pageSize.getWidth();
+  const {jsPDF}=window.jspdf,d=new jsPDF({orientation:"landscape",unit:"pt",format:"a4"}),W=d.internal.pageSize.getWidth(),NAVY=[19,35,58];
   const V=cur.filter(r=>r.s=="V"),A=cur.filter(r=>r.s=="A"),vv=sum(V),va=sum(A);
-  d.setFontSize(16);d.text("Inadimplência — Produtos PJ Condor",40,40);
-  d.setFontSize(9);d.setTextColor(100);d.text(`Posição ${dmy(DATA.ref)} · gerado em ${dmy(stamp())}`,40,55);d.text("Filtros: "+filtroTxt(),40,67,{maxWidth:W-80});
+  d.setFillColor(...NAVY);d.rect(0,0,W,52,"F");d.setTextColor(255);d.setFontSize(15);d.text("Inadimplência | Produtos PJ",40,32);
+  d.setFontSize(9);d.text(`Posição ${dmy(DATA.ref)} · gerado em ${dmy(stamp())}`,W-40,32,{align:"right"});
+  d.setTextColor(90);d.setFontSize(9);d.text("Filtros: "+filtroTxt(),40,70,{maxWidth:W-80});
   d.setTextColor(0);d.setFontSize(10);
-  d.text(`Carteira ${brl(vv+va)}   |   Vencido ${brl(vv)} (${vv+va?pct(vv/(vv+va)):"–"})   |   A vencer ${brl(va)}   |   Devedores com vencido: ${new Set(V.map(r=>r.dev)).size}`,40,88);
-  let y=100;
-  d.setFontSize(11);d.text("Insights",40,y+12);
-  const tmp=document.createElement("div");d.setFontSize(9);y+=22;
-  [...$("ins").children].forEach(li=>{const t="• "+li.textContent,l=d.splitTextToSize(t,W-80);d.text(l,40,y);y+=l.length*11+3});
+  d.text(`Carteira ${brl(vv+va)}   |   Vencido ${brl(vv)} (${vv+va?pct(vv/(vv+va)):"–"})   |   A vencer ${brl(va)}${PUB?"":`   |   Devedores com vencido: ${new Set(V.map(r=>r.dev)).size}`}`,40,88);
+  let y=104;d.setFontSize(11);d.text("Insights",40,y+8);d.setFontSize(9);y+=22;
+  [...$("ins").children].forEach(li=>{const l=d.splitTextToSize("• "+li.textContent,W-80);d.text(l,40,y);y+=l.length*11+3});
   const m=matriz(),cm=(r,i)=>i==r.length-1?pct(r[i]):brl(r[i]);
-  d.autoTable({startY:y+6,head:[m.head],body:m.rows.map(r=>r.map((c,i)=>i?cm(r,i):c)),styles:{fontSize:7},headStyles:{fillColor:[31,78,156]},
+  d.autoTable({startY:y+6,head:[m.head],body:m.rows.map(r=>r.map((c,i)=>i?cm(r,i):c)),styles:{fontSize:7},headStyles:{fillColor:NAVY},
     columnStyles:Object.fromEntries(m.head.map((_,i)=>[i,i?{halign:"right"}:{}])),didParseCell:h=>{if(h.row.index==m.rows.length-1)h.cell.styles.fontStyle="bold"}});
   if(!PUB){const top=[...group(V,r=>r.dev+" ("+r.doc+")")].map(([k,a])=>[k,a.length,sum(a)]).sort((a,b)=>b[2]-a[2]).slice(0,15);
-  d.autoTable({head:[["Top 15 devedores (vencido)","Títulos","Vencido","% do vencido"]],body:top.map(x=>[x[0],x[1],brl(x[2]),pct(x[2]/vv)]),styles:{fontSize:7},headStyles:{fillColor:[31,78,156]},
-    columnStyles:{1:{halign:"right"},2:{halign:"right"},3:{halign:"right"}}})}
+    d.autoTable({head:[["Top 15 devedores (vencido)","Títulos","Vencido","% do vencido"]],body:top.map(x=>[x[0],x[1],brl(x[2]),pct(x[2]/vv)]),styles:{fontSize:7},headStyles:{fillColor:NAVY},
+      columnStyles:{1:{halign:"right"},2:{halign:"right"},3:{halign:"right"}}})}
   const CAP=3000,a=[...cur].sort((x,y)=>y.val-x.val).slice(0,CAP);
-  d.addPage();d.setFontSize(11);d.text(`Analítico — ${a.length.toLocaleString("pt-BR")} maiores valores${cur.length>CAP?` de ${cur.length.toLocaleString("pt-BR")} (use o Excel para a lista completa)`:""}`,40,40);
+  d.addPage();d.setFontSize(11);d.text(`Analítico — ${num(a.length)} maiores valores${cur.length>CAP?` de ${num(cur.length)} (use o Excel para a lista completa)`:""}`,40,40);
   d.autoTable({startY:50,head:[["Produto","Sit.","Atraso","Venc.","Valor","Loja","NF/Chq"].concat(PUB?[]:["Devedor","CNPJ/CPF"])],
-    body:a.map(r=>[PN[r.p],r.s=="V"?"Venc.":"A venc.",Math.max(0,r.a),dmy(r.v),brl(r.val),r.loja,r.nf].concat(PUB?[]:[r.dev,r.doc])),styles:{fontSize:6.5,cellPadding:2},headStyles:{fillColor:[31,78,156]},
+    body:a.map(r=>[PN[r.p],r.s=="V"?"Venc.":"A venc.",Math.max(0,r.a),dmy(r.v),brl(r.val),r.loja,r.nf].concat(PUB?[]:[r.dev,r.doc])),styles:{fontSize:6.5,cellPadding:2},headStyles:{fillColor:NAVY},
     columnStyles:{2:{halign:"right"},4:{halign:"right"}}});
   const n=d.internal.getNumberOfPages();for(let i=1;i<=n;i++){d.setPage(i);d.setFontSize(8);d.setTextColor(120);d.text(`Página ${i}/${n}`,W-80,d.internal.pageSize.getHeight()-20)}
   d.save(`inadimplencia_pj_${stamp()}.pdf`);
